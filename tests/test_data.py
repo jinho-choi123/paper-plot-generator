@@ -69,7 +69,28 @@ def test_load_plot_data_reports_non_numeric_value(tmp_path):
         load_plot_data(config)
 
 
+def test_load_plot_data_supports_reusing_source_column(tmp_path):
+    csv_path = write_csv(tmp_path / "line.csv", "System,Value\nGPU,1\n")
+    config = PlotConfig(
+        plot_type="line_series",
+        data_path=csv_path,
+        columns={"series": "System", "x": "Value", "y": "Value"},
+        output_path=Path("figures/line"),
+        order={},
+    )
+
+    frame = load_plot_data(config)
+
+    assert list(frame.columns) == ["series", "x", "y"]
+    assert frame.loc[0, "x"] == 1
+    assert frame.loc[0, "y"] == 1
+
+
 def test_ordered_unique_uses_explicit_order_then_remaining_values():
     values = ["GPU+PIM", "GPU", "Pimba", "GPU"]
 
     assert ordered_unique(values, ["GPU", "GPU+PIM"]) == ["GPU", "GPU+PIM", "Pimba"]
+
+
+def test_ordered_unique_deduplicates_explicit_order():
+    assert ordered_unique(["B", "A"], ["A", "A"]) == ["A", "B"]

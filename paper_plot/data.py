@@ -25,18 +25,14 @@ def load_plot_data(config: PlotConfig) -> pd.DataFrame:
     except FileNotFoundError as exc:
         raise DataError(f"CSV file not found: {config.data_path}") from exc
 
-    rename_map: dict[str, str] = {}
+    frame = pd.DataFrame()
     for internal_name, external_name in config.columns.items():
         if external_name not in source.columns:
             raise DataError(
                 "CSV column not found for mapping "
                 f"data.columns.{internal_name}: {external_name}"
             )
-        rename_map[external_name] = internal_name
-
-    frame = source.rename(columns=rename_map)
-    selected_columns = list(config.columns.keys())
-    frame = frame[selected_columns].copy()
+        frame[internal_name] = source[external_name]
 
     for column in NUMERIC_COLUMNS[config.plot_type]:
         frame[column] = pd.to_numeric(frame[column], errors="coerce")
@@ -57,6 +53,9 @@ def ordered_unique(
     if explicit_order is None:
         return seen
 
-    ordered = [value for value in explicit_order if value in seen]
+    ordered = []
+    for value in explicit_order:
+        if value in seen and value not in ordered:
+            ordered.append(value)
     ordered.extend(value for value in seen if value not in ordered)
     return ordered
