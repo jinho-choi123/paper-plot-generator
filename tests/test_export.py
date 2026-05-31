@@ -11,6 +11,10 @@ def test_output_stem_removes_known_extension():
     assert output_stem(Path("figures/result")) == Path("figures/result")
 
 
+def test_output_stem_removes_arbitrary_extension():
+    assert output_stem(Path("figures/result.jpeg")) == Path("figures/result")
+
+
 def test_export_figure_writes_pdf_and_png(tmp_path):
     fig, ax = plt.subplots()
     ax.plot([1, 2], [3, 4])

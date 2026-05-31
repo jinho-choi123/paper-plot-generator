@@ -5,12 +5,9 @@ from pathlib import Path
 from matplotlib.figure import Figure
 
 
-KNOWN_OUTPUT_SUFFIXES = {".pdf", ".png", ".svg"}
-
-
 def output_stem(path: str | Path) -> Path:
     output_path = Path(path)
-    if output_path.suffix.lower() in KNOWN_OUTPUT_SUFFIXES:
+    if output_path.suffix:
         return output_path.with_suffix("")
     return output_path
 
