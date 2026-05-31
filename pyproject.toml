@@ -20,6 +20,9 @@ dev = [
     "pytest>=8.0",
 ]
 
+[project.scripts]
+paper-plot = "paper_plot.cli:main"
+
 [tool.hatch.build.targets.wheel]
 packages = ["paper_plot"]
 
