@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import pandas as pd
+import pytest
 
 from paper_plot.config import PlotConfig
 from paper_plot.templates import render_plot
@@ -43,8 +44,33 @@ def test_render_stacked_bar_draws_one_patch_per_stack_segment():
     ax = fig.axes[0]
 
     assert len(ax.patches) == 4
+    assert [patch.get_height() for patch in ax.patches] == pytest.approx(
+        [0.5, 0.3, 0.2, 0.1]
+    )
+    assert [patch.get_y() for patch in ax.patches] == pytest.approx(
+        [0.0, 0.5, 0.0, 0.2]
+    )
     assert ax.get_ylabel() == "Normalized Latency"
     assert ax.get_legend() is not None
+
+
+def test_render_stacked_bar_sums_duplicate_stack_rows():
+    frame = pd.DataFrame(
+        {
+            "model": ["RetNet", "RetNet", "RetNet"],
+            "batch": [32, 32, 32],
+            "series": ["GPU", "GPU", "GPU"],
+            "stack": ["State Update", "GEMM", "GEMM"],
+            "value": [0.5, 0.3, 0.2],
+        }
+    )
+
+    fig = render_stacked_bar(frame, sample_config())
+    ax = fig.axes[0]
+
+    assert len(ax.patches) == 2
+    assert [patch.get_height() for patch in ax.patches] == pytest.approx([0.5, 0.5])
+    assert [patch.get_y() for patch in ax.patches] == pytest.approx([0.0, 0.5])
 
 
 def test_render_plot_dispatches_stacked_bar():

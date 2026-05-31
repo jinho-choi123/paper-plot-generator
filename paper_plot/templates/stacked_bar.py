@@ -22,6 +22,7 @@ def render_stacked_bar(frame: pd.DataFrame, config: PlotConfig) -> Figure:
     series_labels: list[str] = []
     batch_centers: list[tuple[float, str]] = []
     model_centers: list[tuple[float, str]] = []
+    seen_labels: set[str] = set()
 
     for model in model_order:
         model_start = x_cursor
@@ -40,17 +41,16 @@ def render_stacked_bar(frame: pd.DataFrame, config: PlotConfig) -> Figure:
                     row = subset[subset["stack"] == stack]
                     if row.empty:
                         continue
-                    value = float(row.iloc[0]["value"])
+                    value = float(row["value"].sum())
+                    stack_label = str(stack)
+                    label = stack_label if stack_label not in seen_labels else None
+                    seen_labels.add(stack_label)
                     ax.bar(
                         x_cursor,
                         value,
                         bottom=bottom,
                         width=0.72,
-                        label=(
-                            str(stack)
-                            if str(stack) not in ax.get_legend_handles_labels()[1]
-                            else None
-                        ),
+                        label=label,
                         color=STACK_COLORS.get(str(stack), f"C{index}"),
                         edgecolor="black",
                         linewidth=0.8,
