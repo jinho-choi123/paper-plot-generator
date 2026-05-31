@@ -23,6 +23,7 @@ def render_grouped_bar(frame: pd.DataFrame, config: PlotConfig) -> Figure:
     centers: list[float] = []
     batch_labels: list[str] = []
     boundary_positions: list[float] = []
+    seen_labels: set[str] = set()
 
     for group in group_order:
         group_start = x_cursor
@@ -43,15 +44,19 @@ def render_grouped_bar(frame: pd.DataFrame, config: PlotConfig) -> Figure:
                     if rows.empty:
                         continue
                     offset = (index - (len(series_order) - 1) / 2) * bar_width
-                    duplicate_step = bar_width * 0.18
-                    duplicate_start = -((len(rows) - 1) / 2) * duplicate_step
+                    duplicate_width = bar_width / len(rows)
+                    duplicate_start = -bar_width / 2 + duplicate_width / 2
                     for duplicate_index, (_, row) in enumerate(rows.iterrows()):
-                        _, labels = ax.get_legend_handles_labels()
-                        label = str(series) if str(series) not in labels else None
+                        series_label = str(series)
+                        label = series_label if series_label not in seen_labels else None
+                        seen_labels.add(series_label)
                         ax.bar(
-                            center + offset + duplicate_start + duplicate_index * duplicate_step,
+                            center
+                            + offset
+                            + duplicate_start
+                            + duplicate_index * duplicate_width,
                             float(row["value"]),
-                            width=bar_width,
+                            width=duplicate_width,
                             label=label,
                             color=SERIES_COLORS.get(str(series), f"C{index}"),
                             edgecolor="black",

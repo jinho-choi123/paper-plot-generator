@@ -59,8 +59,12 @@ def test_render_grouped_bar_draws_duplicate_series_rows():
     )
 
     fig = render_grouped_bar(frame, sample_config())
+    duplicate_patches = sorted(fig.axes[0].patches, key=lambda patch: patch.get_x())
 
-    assert len(fig.axes[0].patches) == len(frame)
+    assert len(duplicate_patches) == len(frame)
+    assert duplicate_patches[0].get_x() + duplicate_patches[0].get_width() <= (
+        duplicate_patches[1].get_x()
+    )
 
 
 def test_render_plot_dispatches_grouped_bar():
