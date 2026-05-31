@@ -13,6 +13,16 @@ SERIES_COLORS = {
 LINE_COLORS = ["#1f77b4", "#ff7f0e", "#2ca02c", "#9467bd", "#d62728"]
 LINE_MARKERS = ["o", "s", "v", "^", "D"]
 
+STACK_COLORS = {
+    "State Update": "#2F5D57",
+    "Attention": "#5AA89D",
+    "Discretization": "#7FA37B",
+    "Causal Conv": "#A8B878",
+    "GEMM": "#E3C960",
+    "Communication": "#D46F4D",
+    "Others": "#984A45",
+}
+
 
 def apply_paper_axes(ax: Axes) -> None:
     for spine in ax.spines.values():
