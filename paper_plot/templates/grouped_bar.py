@@ -39,21 +39,24 @@ def render_grouped_bar(frame: pd.DataFrame, config: PlotConfig) -> Figure:
                 centers.append(center)
                 batch_labels.append(str(batch))
                 for index, series in enumerate(series_order):
-                    row = subset[subset["series"] == series]
-                    if row.empty:
+                    rows = subset[subset["series"] == series]
+                    if rows.empty:
                         continue
                     offset = (index - (len(series_order) - 1) / 2) * bar_width
-                    _, labels = ax.get_legend_handles_labels()
-                    label = str(series) if str(series) not in labels else None
-                    ax.bar(
-                        center + offset,
-                        float(row.iloc[0]["value"]),
-                        width=bar_width,
-                        label=label,
-                        color=SERIES_COLORS.get(str(series), f"C{index}"),
-                        edgecolor="black",
-                        linewidth=1.0,
-                    )
+                    duplicate_step = bar_width * 0.18
+                    duplicate_start = -((len(rows) - 1) / 2) * duplicate_step
+                    for duplicate_index, (_, row) in enumerate(rows.iterrows()):
+                        _, labels = ax.get_legend_handles_labels()
+                        label = str(series) if str(series) not in labels else None
+                        ax.bar(
+                            center + offset + duplicate_start + duplicate_index * duplicate_step,
+                            float(row["value"]),
+                            width=bar_width,
+                            label=label,
+                            color=SERIES_COLORS.get(str(series), f"C{index}"),
+                            edgecolor="black",
+                            linewidth=1.0,
+                        )
                 x_cursor += 1.0
             model_center = (model_start + x_cursor - 1.0) / 2
             ax.text(
