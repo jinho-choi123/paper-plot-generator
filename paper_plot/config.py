@@ -41,7 +41,7 @@ def load_config(path: str | Path) -> PlotConfig:
     if not isinstance(raw, dict):
         raise ConfigError("Config must be a YAML mapping")
 
-    plot_type = _required_nested(raw, ("plot", "type"))
+    plot_type = _required_string(raw, ("plot", "type"))
     if plot_type not in SUPPORTED_PLOT_TYPES:
         raise ConfigError(f"Unsupported plot type: {plot_type}")
 

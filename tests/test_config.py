@@ -59,6 +59,24 @@ output:
         load_config(config_path)
 
 
+def test_rejects_non_string_plot_type(tmp_path):
+    config_path = write_yaml(
+        tmp_path / "plot.yaml",
+        """
+plot:
+  type: [grouped_bar]
+data:
+  path: data.csv
+  columns: {}
+output:
+  path: figures/out
+""",
+    )
+
+    with pytest.raises(ConfigError, match="plot.type must be a string"):
+        load_config(config_path)
+
+
 def test_rejects_missing_required_column_mapping(tmp_path):
     config_path = write_yaml(
         tmp_path / "plot.yaml",
