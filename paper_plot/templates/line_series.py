@@ -15,7 +15,7 @@ from paper_plot.templates.style import (
 
 
 def render_line_series(frame: pd.DataFrame, config: PlotConfig) -> Figure:
-    fig, ax = plt.subplots(figsize=(4.8, 2.2))
+    fig, ax = plt.subplots(figsize=(4.8, 6.6))
     series_order = ordered_unique(frame["series"], config.order.get("series"))
 
     for index, series in enumerate(series_order):
@@ -34,6 +34,6 @@ def render_line_series(frame: pd.DataFrame, config: PlotConfig) -> Figure:
     ax.set_ylabel("ShareGPT\nNorm. Latency (s/token)")
     ax.set_xlabel("")
     apply_paper_axes(ax)
-    style_legend(ax, ncol=len(series_order))
-    fig.tight_layout()
+    style_legend(ax, ncol=len(series_order), bbox_to_anchor=(0.5, 1.34))
+    fig.subplots_adjust(top=0.70)
     return fig

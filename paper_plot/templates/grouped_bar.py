@@ -10,7 +10,7 @@ from paper_plot.templates.style import SERIES_COLORS, apply_paper_axes, style_le
 
 
 def render_grouped_bar(frame: pd.DataFrame, config: PlotConfig) -> Figure:
-    fig, ax = plt.subplots(figsize=(10.5, 2.6))
+    fig, ax = plt.subplots(figsize=(10.5, 7.8))
 
     group_order = ordered_unique(frame["group"], config.order.get("group"))
     model_order = ordered_unique(frame["model"], config.order.get("model"))
@@ -18,7 +18,7 @@ def render_grouped_bar(frame: pd.DataFrame, config: PlotConfig) -> Figure:
     series_order = ordered_unique(frame["series"], config.order.get("series"))
 
     bar_width = 0.16
-    cluster_gap = 0.35
+    cluster_gap = 0.12
     x_cursor = 0.0
     centers: list[float] = []
     batch_labels: list[str] = []
@@ -98,6 +98,6 @@ def render_grouped_bar(frame: pd.DataFrame, config: PlotConfig) -> Figure:
     ax.set_xticklabels(batch_labels)
     ax.set_ylabel("Normalized Throughput")
     apply_paper_axes(ax)
-    style_legend(ax, ncol=len(series_order))
-    fig.subplots_adjust(bottom=0.34, top=0.78)
+    style_legend(ax, ncol=len(series_order), bbox_to_anchor=(0.5, 1.34))
+    fig.subplots_adjust(bottom=0.34, top=0.70)
     return fig

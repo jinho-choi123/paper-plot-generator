@@ -10,18 +10,20 @@ from paper_plot.templates.style import STACK_COLORS, apply_paper_axes, style_leg
 
 
 def render_stacked_bar(frame: pd.DataFrame, config: PlotConfig) -> Figure:
-    fig, ax = plt.subplots(figsize=(10.5, 2.8))
+    fig, ax = plt.subplots(figsize=(10.5, 8.4))
 
     model_order = ordered_unique(frame["model"], config.order.get("model"))
     batch_order = ordered_unique(frame["batch"], config.order.get("batch"))
     series_order = ordered_unique(frame["series"], config.order.get("series"))
     stack_order = ordered_unique(frame["stack"], config.order.get("stack"))
 
+    bar_width = 0.08
+    x_step = 0.12
+    batch_gap = 0.10
+    model_gap = 0.18
     x_cursor = 0.0
     x_positions: list[float] = []
     series_labels: list[str] = []
-    batch_centers: list[tuple[float, str]] = []
-    model_centers: list[tuple[float, str]] = []
     seen_labels: set[str] = set()
 
     for model in model_order:
@@ -49,7 +51,7 @@ def render_stacked_bar(frame: pd.DataFrame, config: PlotConfig) -> Figure:
                         x_cursor,
                         value,
                         bottom=bottom,
-                        width=0.72,
+                        width=bar_width,
                         label=label,
                         color=STACK_COLORS.get(str(stack), f"C{index}"),
                         edgecolor="black",
@@ -58,37 +60,17 @@ def render_stacked_bar(frame: pd.DataFrame, config: PlotConfig) -> Figure:
                     bottom += value
                 x_positions.append(x_cursor)
                 series_labels.append(str(series))
-                x_cursor += 1.0
+                x_cursor += x_step
             if x_cursor > batch_start:
-                batch_centers.append(((batch_start + x_cursor - 1.0) / 2, str(batch)))
-                x_cursor += 0.35
+                x_cursor += batch_gap
         if x_cursor > model_start:
-            model_centers.append(((model_start + x_cursor - 1.35) / 2, str(model)))
-            x_cursor += 0.55
+            x_cursor += model_gap
 
     ax.set_xticks(x_positions)
     ax.set_xticklabels(series_labels, rotation=90)
-    for center, label in batch_centers:
-        ax.text(
-            center,
-            -0.26,
-            label,
-            ha="center",
-            va="top",
-            transform=ax.get_xaxis_transform(),
-        )
-    for center, label in model_centers:
-        ax.text(
-            center,
-            -0.46,
-            label,
-            ha="center",
-            va="top",
-            transform=ax.get_xaxis_transform(),
-        )
 
     ax.set_ylabel("Normalized Latency")
     apply_paper_axes(ax)
-    style_legend(ax, ncol=len(stack_order))
-    fig.subplots_adjust(bottom=0.42, top=0.76)
+    style_legend(ax, ncol=len(stack_order), bbox_to_anchor=(0.5, 1.34))
+    fig.subplots_adjust(bottom=0.28, top=0.70)
     return fig

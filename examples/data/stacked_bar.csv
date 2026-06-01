@@ -1,0 +1,42 @@
+Model,Batch,System,Component,Latency
+RetNet,32,GPU,State Update,0.35
+RetNet,32,GPU,Attention,0.18
+RetNet,32,GPU,GEMM,0.30
+RetNet,32,GPU,Communication,0.10
+RetNet,32,GPU,Others,0.04
+RetNet,32,Pimba,State Update,0.08
+RetNet,32,Pimba,Attention,0.06
+RetNet,32,Pimba,GEMM,0.17
+RetNet,32,Pimba,Communication,0.10
+RetNet,32,Pimba,Others,0.05
+RetNet,64,GPU,State Update,0.40
+RetNet,64,GPU,Attention,0.20
+RetNet,64,GPU,GEMM,0.25
+RetNet,64,GPU,Communication,0.09
+RetNet,64,GPU,Others,0.04
+RetNet,64,Pimba,State Update,0.09
+RetNet,64,Pimba,Attention,0.05
+RetNet,64,Pimba,GEMM,0.15
+RetNet,64,Pimba,Communication,0.08
+RetNet,64,Pimba,Others,0.04
+GLA,32,GPU,State Update,0.30
+GLA,32,GPU,Attention,0.22
+GLA,32,GPU,GEMM,0.27
+GLA,32,GPU,Communication,0.11
+GLA,32,GPU,Others,0.05
+GLA,32,Pimba,State Update,0.07
+GLA,32,Pimba,Attention,0.08
+GLA,32,Pimba,GEMM,0.16
+GLA,32,Pimba,Communication,0.09
+GLA,32,Pimba,Others,0.05
+GLA,64,GPU,State Update,0.33
+GLA,64,GPU,Attention,0.21
+GLA,64,GPU,GEMM,0.26
+GLA,64,GPU,Communication,0.10
+GLA,64,GPU,Others,0.04
+GLA,64,Pimba,State Update,0.08
+GLA,64,Pimba,Attention,0.07
+GLA,64,Pimba,GEMM,0.15
+GLA,64,Pimba,Communication,0.08
+GLA,64,Pimba,Others,0.04
+

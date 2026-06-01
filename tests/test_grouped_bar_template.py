@@ -67,6 +67,58 @@ def test_render_grouped_bar_draws_duplicate_series_rows():
     )
 
 
+def test_render_grouped_bar_places_legend_above_plot_area():
+    frame = pd.DataFrame(
+        {
+            "group": ["Small Scale", "Small Scale", "Small Scale"],
+            "model": ["RetNet", "RetNet", "RetNet"],
+            "batch": [32, 32, 32],
+            "series": ["GPU", "GPU+Q", "Pimba"],
+            "value": [1.0, 1.2, 1.6],
+        }
+    )
+
+    fig = render_grouped_bar(frame, sample_config())
+    legend = fig.axes[0].get_legend()
+
+    assert legend is not None
+    assert legend.get_bbox_to_anchor()._bbox.y0 >= 1.30
+
+
+def test_render_grouped_bar_uses_tall_figure():
+    frame = pd.DataFrame(
+        {
+            "group": ["Small Scale"],
+            "model": ["RetNet"],
+            "batch": [32],
+            "series": ["GPU"],
+            "value": [1.0],
+        }
+    )
+
+    fig = render_grouped_bar(frame, sample_config())
+
+    assert fig.get_size_inches()[1] == 7.8
+
+
+def test_render_grouped_bar_uses_compact_group_spacing():
+    frame = pd.DataFrame(
+        {
+            "group": ["Small Scale", "Large Scale"],
+            "model": ["RetNet", "RetNet"],
+            "batch": [32, 32],
+            "series": ["GPU", "GPU"],
+            "value": [1.0, 1.1],
+        }
+    )
+
+    fig = render_grouped_bar(frame, sample_config())
+    ticks = fig.axes[0].get_xticks()
+
+    assert len(ticks) == 2
+    assert ticks[1] - ticks[0] <= 1.15
+
+
 def test_render_plot_dispatches_grouped_bar():
     frame = pd.DataFrame(
         {

@@ -1,0 +1,18 @@
+plot:
+  type: stacked_bar
+data:
+  path: examples/data/stacked_bar.csv
+  columns:
+    model: Model
+    batch: Batch
+    series: System
+    stack: Component
+    value: Latency
+output:
+  path: examples/figures/stacked_bar
+order:
+  model: [RetNet, GLA]
+  batch: [32, 64]
+  series: [GPU, Pimba]
+  stack: [State Update, Attention, GEMM, Communication, Others]
+

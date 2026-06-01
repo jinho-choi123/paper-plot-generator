@@ -33,13 +33,18 @@ def apply_paper_axes(ax: Axes) -> None:
     ax.tick_params(axis="both", width=1.2, labelsize=10)
 
 
-def style_legend(ax: Axes, *, ncol: int | None = None) -> None:
+def style_legend(
+    ax: Axes,
+    *,
+    ncol: int | None = None,
+    bbox_to_anchor: tuple[float, float] = (0.5, 1.18),
+) -> None:
     handles, labels = ax.get_legend_handles_labels()
     if not handles:
         return
     legend = ax.legend(
         loc="upper center",
-        bbox_to_anchor=(0.5, 1.18),
+        bbox_to_anchor=bbox_to_anchor,
         ncol=ncol or len(handles),
         frameon=True,
         fancybox=False,

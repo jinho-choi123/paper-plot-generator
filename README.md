@@ -35,6 +35,8 @@ uv run paper-plot config.yaml
 
 The command writes both `figures/line.pdf` and `figures/line.png`.
 
+Generated files are written to `examples/figures/` as both PDF and PNG.
+
 ## Plot Types
 
 - `grouped_bar`: grouped normalized throughput bars

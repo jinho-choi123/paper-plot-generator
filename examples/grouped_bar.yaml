@@ -1,0 +1,18 @@
+plot:
+  type: grouped_bar
+data:
+  path: examples/data/grouped_bar.csv
+  columns:
+    group: Scale
+    model: Model
+    batch: Batch
+    series: System
+    value: Throughput
+output:
+  path: examples/figures/grouped_bar
+order:
+  group: [Small Scale, Large Scale]
+  model: [RetNet, GLA]
+  batch: [32, 64]
+  series: [GPU, GPU+Q, GPU+PIM, Pimba]
+

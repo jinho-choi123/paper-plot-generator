@@ -1,0 +1,13 @@
+plot:
+  type: line_series
+data:
+  path: examples/data/line_series.csv
+  columns:
+    series: System
+    x: Sequence Length
+    y: Normalized Latency
+output:
+  path: examples/figures/line_series
+order:
+  series: [GPU, GPU+Q, GPU+PIM, Pimba]
+
